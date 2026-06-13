@@ -1,0 +1,8 @@
+# Keep repository text files normalized to LF to avoid CRLF warnings in vault PRs.
+* text=auto eol=lf
+
+# Obsidian and repository text assets.
+*.md text eol=lf
+*.canvas text eol=lf
+*.py text eol=lf
+*.json text eol=lf

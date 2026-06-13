@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFLICT_MARKER_RE = re.compile(r"^(<<<<<<<|=======|>>>>>>>)", re.MULTILINE)
 OLD_FLASHCARD_TAG_RE = re.compile(r"(?<!s)#flashcard(?!s)(?:\s|$)")
 INLINE_CARD_SPACE_RE = re.compile(r"(?m)^[^\n]+?::\s+")
+TRAILING_WHITESPACE_RE = re.compile(r"(?m)[ \t]+$")
 
 
 def run_git(args: list[str]) -> str:
@@ -70,6 +71,8 @@ def main() -> int:
         rel = path.relative_to(ROOT)
         if text.count("```") % 2:
             errors.append(f"Unbalanced Markdown code fences: {rel}")
+        if TRAILING_WHITESPACE_RE.search(text):
+            errors.append(f"Trailing whitespace found: {rel}")
         fm = frontmatter(text, path, errors)
         if OLD_FLASHCARD_TAG_RE.search(text):
             errors.append(f"Old singular #flashcard tag remains: {rel}")
